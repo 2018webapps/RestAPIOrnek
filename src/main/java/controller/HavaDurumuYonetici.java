@@ -13,6 +13,7 @@ import model.HavaDurumu;
 import model.Sehir;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Request.Builder;
 import okhttp3.Response;
 
 /**
@@ -27,10 +28,11 @@ public class HavaDurumuYonetici {
     private final ObjectMapper mapper = new ObjectMapper();
     private final OkHttpClient httpclient = new OkHttpClient();
     private Request request;
+    private Builder builder= new Builder();
 
     public HavaDurumu havaDurumuGetir(String kod) throws Exception {
         HavaDurumu[] havaDurumu = null;
-        request = new Request.Builder().url(MGM_SERVIS_URL + kod).get().build();
+        request =builder.url(MGM_SERVIS_URL + kod).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             havaDurumu = mapper.readValue(response.body().bytes(), HavaDurumu[].class);
         }
@@ -39,7 +41,7 @@ public class HavaDurumuYonetici {
 
     public Sehir sehirGetir(String il) throws Exception {
         Sehir[] sehirler = null;
-        request = new Request.Builder().url(MGM_SEHIR_BILGI_URL + il).get().build();
+        request = builder.url(MGM_SEHIR_BILGI_URL + il).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
         }
@@ -100,7 +102,7 @@ public class HavaDurumuYonetici {
 
     public ArrayList<Sehir> tumSehirleriGetir() throws Exception {
         Sehir[] sehirler = null;       
-        request = new Request.Builder().url(MGM_SEHIRLER_URL).get().build();
+        request = builder.url(MGM_SEHIRLER_URL).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
         }
