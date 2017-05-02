@@ -20,28 +20,28 @@ import okhttp3.Response;
  * @author asimsinanyuksel
  */
 public class HavaDurumuYonetici {
-    
-   private static final String MGM_SERVIS_URL = "https://servis.mgm.gov.tr/api/sondurumlar?merkezid=";
-   private static final String MGM_SEHIR_BILGI_URL = "https://servis.mgm.gov.tr/api/merkezler?il=";
+
+    private static final String MGM_SERVIS_URL = "https://servis.mgm.gov.tr/api/sondurumlar?merkezid=";
+    private static final String MGM_SEHIR_BILGI_URL = "https://servis.mgm.gov.tr/api/merkezler?il=";
     private static final String MGM_SEHIRLER_URL = "https://servis.mgm.gov.tr/api/merkezler/iller ";
- 
+    private ObjectMapper mapper = new ObjectMapper();
+    private OkHttpClient httpclient = new OkHttpClient();
+    private Request request;
+
     public HavaDurumu havaDurumuGetir(String kod) throws Exception {
         HavaDurumu[] havaDurumu = null;
-        OkHttpClient httpclient = new OkHttpClient();
-        Request request = new Request.Builder().url(MGM_SERVIS_URL+kod).get().build();
-        try (Response response = httpclient.newCall(request).execute()) {      
-            ObjectMapper mapper = new ObjectMapper();
-            havaDurumu = mapper.readValue(response.body().bytes(),HavaDurumu[].class);
+        request = new Request.Builder().url(MGM_SERVIS_URL + kod).get().build();
+        try (Response response = httpclient.newCall(request).execute()) {
+            havaDurumu = mapper.readValue(response.body().bytes(), HavaDurumu[].class);
         }
         return havaDurumu[0];
     }
+
     public Sehir sehirGetir(String il) throws Exception {
-       Sehir[] sehirler = null;
-        OkHttpClient httpclient = new OkHttpClient();
-        Request request = new Request.Builder().url(MGM_SEHIR_BILGI_URL+il).get().build();
-        try (Response response = httpclient.newCall(request).execute()) {      
-            ObjectMapper mapper = new ObjectMapper();
-            sehirler= mapper.readValue(response.body().bytes(),Sehir[].class);
+        Sehir[] sehirler = null;
+        request = new Request.Builder().url(MGM_SEHIR_BILGI_URL + il).get().build();
+        try (Response response = httpclient.newCall(request).execute()) {
+            sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
         }
         return sehirler[0];
     }
@@ -72,48 +72,47 @@ public class HavaDurumuYonetici {
 //        "KKR": "Kuzeyli Kuvvetli Rüzgar";
 //        "SCK": "Sıcak";
 //        "SGK": "Soğuk";
-    public String hadiseKodunuMetineDonustur(String kod){
-    if(kod.equalsIgnoreCase("a"))
-        return "Açık";
-    else if (kod.equalsIgnoreCase("ab"))
-        return "Az Bulutlu";
-    else if (kod.equalsIgnoreCase("cb"))
-        return "Çok Bulutlu";
-     else if (kod.equalsIgnoreCase("gsy"))
-        return "Gök Gürültülü Sağnak Yağışlı";
-     else if (kod.equalsIgnoreCase("hy"))
-        return "Hafif Yağmurlu";
-     else if (kod.equalsIgnoreCase("kky"))
-        return "Karla Karışık Yağmurlu";
-     else if (kod.equalsIgnoreCase("ksy"))
-        return "Kuvvetli Sağnak Yağışlı";
-     else if (kod.equalsIgnoreCase("pb"))
-        return "Parçalı Bulutlu";
-     else if (kod.equalsIgnoreCase("y"))
-        return "Yağışlı";
-    else
-         return "Diğer";
-    
-    }
-      public ArrayList<Sehir> tumSehirleriGetir() throws Exception {
-       Sehir[] sehirler = null;
-        OkHttpClient httpclient = new OkHttpClient();
-        Request request = new Request.Builder().url(MGM_SEHIRLER_URL).get().build();
-        try (Response response = httpclient.newCall(request).execute()) {      
-            ObjectMapper mapper = new ObjectMapper();
-            sehirler= mapper.readValue(response.body().bytes(),Sehir[].class);
+
+    public String hadiseKodunuMetineDonustur(String kod) {
+        if (kod.equalsIgnoreCase("a")) {
+            return "Açık";
+        } else if (kod.equalsIgnoreCase("ab")) {
+            return "Az Bulutlu";
+        } else if (kod.equalsIgnoreCase("cb")) {
+            return "Çok Bulutlu";
+        } else if (kod.equalsIgnoreCase("gsy")) {
+            return "Gök Gürültülü Sağnak Yağışlı";
+        } else if (kod.equalsIgnoreCase("hy")) {
+            return "Hafif Yağmurlu";
+        } else if (kod.equalsIgnoreCase("kky")) {
+            return "Karla Karışık Yağmurlu";
+        } else if (kod.equalsIgnoreCase("ksy")) {
+            return "Kuvvetli Sağnak Yağışlı";
+        } else if (kod.equalsIgnoreCase("pb")) {
+            return "Parçalı Bulutlu";
+        } else if (kod.equalsIgnoreCase("y")) {
+            return "Yağışlı";
+        } else {
+            return "Diğer";
         }
-        return new ArrayList<>(Arrays.asList(sehirler)) ;
+
     }
-    
-    
+
+    public ArrayList<Sehir> tumSehirleriGetir() throws Exception {
+        Sehir[] sehirler = null;       
+        request = new Request.Builder().url(MGM_SEHIRLER_URL).get().build();
+        try (Response response = httpclient.newCall(request).execute()) {
+            sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
+        }
+        return new ArrayList<>(Arrays.asList(sehirler));
+    }
     public static ImageIcon resimOlustur(String yol) {
-        java.net.URL imgURL = HavaDurumuYonetici.class.getResource("/resimler/"+yol+".png");
+        java.net.URL imgURL = HavaDurumuYonetici.class.getResource("/resimler/" + yol + ".png");
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {
             return null;
         }
     }
-    
+
 }
