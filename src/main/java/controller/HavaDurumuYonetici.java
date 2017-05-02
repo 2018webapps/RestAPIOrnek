@@ -24,8 +24,8 @@ public class HavaDurumuYonetici {
     private static final String MGM_SERVIS_URL = "https://servis.mgm.gov.tr/api/sondurumlar?merkezid=";
     private static final String MGM_SEHIR_BILGI_URL = "https://servis.mgm.gov.tr/api/merkezler?il=";
     private static final String MGM_SEHIRLER_URL = "https://servis.mgm.gov.tr/api/merkezler/iller ";
-    private ObjectMapper mapper = new ObjectMapper();
-    private OkHttpClient httpclient = new OkHttpClient();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final OkHttpClient httpclient = new OkHttpClient();
     private Request request;
 
     public HavaDurumu havaDurumuGetir(String kod) throws Exception {
