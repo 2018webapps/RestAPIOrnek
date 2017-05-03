@@ -30,7 +30,7 @@ public class HavaDurumuYonetici {
     
     private final OkHttpClient httpclient = new OkHttpClient();
     private Request request;
-    private Builder builder= new Builder();
+    private final Builder builder= new Builder();
 
     public HavaDurumu havaDurumuGetir(String kod) throws Exception {
         HavaDurumu[] havaDurumu = null;
