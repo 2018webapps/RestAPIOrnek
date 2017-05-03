@@ -22,17 +22,19 @@ import okhttp3.Response;
  */
 public class HavaDurumuYonetici {
 
-    private static final String MGM_SERVIS_URL = "https://servis.mgm.gov.tr/api/sondurumlar?merkezid=";
-    private static final String MGM_SEHIR_BILGI_URL = "https://servis.mgm.gov.tr/api/merkezler?il=";
-    private static final String MGM_SEHIRLER_URL = "https://servis.mgm.gov.tr/api/merkezler/iller ";
+    private static final String MGM_SERVIS_URL = "https://servis.mgm.gov.tr/api/";
+    private static final String SON_DURUMLAR="sondurumlar?merkezid=";
+    private static final String MERKEZLER="merkezler?il=";
+    private static final String ILLER="merkezler/iller";
     private final ObjectMapper mapper = new ObjectMapper();
+    
     private final OkHttpClient httpclient = new OkHttpClient();
     private Request request;
     private Builder builder= new Builder();
 
     public HavaDurumu havaDurumuGetir(String kod) throws Exception {
         HavaDurumu[] havaDurumu = null;
-        request =builder.url(MGM_SERVIS_URL + kod).get().build();
+        request =builder.url(MGM_SERVIS_URL +SON_DURUMLAR+kod).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             havaDurumu = mapper.readValue(response.body().bytes(), HavaDurumu[].class);
         }
@@ -41,7 +43,7 @@ public class HavaDurumuYonetici {
 
     public Sehir sehirGetir(String il) throws Exception {
         Sehir[] sehirler = null;
-        request = builder.url(MGM_SEHIR_BILGI_URL + il).get().build();
+        request = builder.url(MGM_SERVIS_URL+MERKEZLER+ il).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
         }
@@ -102,7 +104,7 @@ public class HavaDurumuYonetici {
 
     public ArrayList<Sehir> tumSehirleriGetir() throws Exception {
         Sehir[] sehirler = null;       
-        request = builder.url(MGM_SEHIRLER_URL).get().build();
+        request = builder.url(MGM_SERVIS_URL+ILLER).get().build();
         try (Response response = httpclient.newCall(request).execute()) {
             sehirler = mapper.readValue(response.body().bytes(), Sehir[].class);
         }
